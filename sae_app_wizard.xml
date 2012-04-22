@@ -1,4 +1,15 @@
 <appwizard>
+    <introduction> 
+        <name>CSV</name>
+        <author>Vendar</author>
+        <icon>default</icon>
+        <homepage>https://github.com/zhiya/csv</homepage>
+        <description>
+            基于CodeIgniter的一款简单易用的PHP框架。
+            与CodeIgniter官方保持更新同步，并在最大程度上保留CodeIgniter原貌。
+            完全兼容SAE，并提供常用开发套件比如REST API，微博开发等。
+        </description>
+    </introduction>    
     <platform>
         <services>
             <service>Mysql</service>
@@ -14,8 +25,5 @@
             </tpl>
         </appconfig>
     </platform>
-    <code>
-        <initScript>sae/install.php</initScript>
-    </code>
 </appwizard>
 
