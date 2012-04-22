@@ -1,0 +1,21 @@
+<appwizard>
+    <platform>
+        <services>
+            <service>Mysql</service>
+        </services>
+        <appconfig>
+            <tpl>
+                <![CDATA[
+                name: <<appname>>
+                version: <<version>>
+                handle:
+                - rewrite: if( !is_file() && !is_dir() && path ~ "^(.*)$" ) goto "/index.php/$1"
+                ]]>
+            </tpl>
+        </appconfig>
+    </platform>
+    <code>
+        <initScript>sae/install.php</initScript>
+    </code>
+</appwizard>
+
