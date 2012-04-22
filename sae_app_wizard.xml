@@ -5,9 +5,9 @@
         <icon>default</icon>
         <homepage>https://github.com/zhiya/csv</homepage>
         <description>
-            基于CodeIgniter的一款简单易用的PHP框架。
-            与CodeIgniter官方保持更新同步，并在最大程度上保留CodeIgniter原貌。
-            完全兼容SAE，并提供常用开发套件比如REST API，微博开发等。
+基于CodeIgniter的一款简单易用的PHP框架。
+与CodeIgniter官方保持更新同步，并在最大程度上保留CodeIgniter原貌。
+完全兼容SAE，并提供常用开发套件比如REST API，微博开发等。
         </description>
     </introduction>    
     <platform>
@@ -17,13 +17,16 @@
         <appconfig>
             <tpl>
                 <![CDATA[
-                name: <<appname>>
-                version: <<version>>
-                handle:
-                - rewrite: if( !is_file() && !is_dir() && path ~ "^(.*)$" ) goto "/index.php/$1"
+name: <<appname>>
+version: <<version>>
+
+handle:
+- rewrite: if( !is_file() && !is_dir() && path ~ "^(.*)$" ) goto "/index.php/$1"
                 ]]>
             </tpl>
         </appconfig>
     </platform>
+    <code>
+    </code>
 </appwizard>
 
