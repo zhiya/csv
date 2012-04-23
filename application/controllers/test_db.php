@@ -8,18 +8,16 @@ class Test_db extends CI_Controller{
     }
 
     public function index(){
-        $res = $this->test_model->select('*')->fetch();
+        $res = $this->test_model->fetch();
         echo var_dump($res) . '<hr>';
     }
 
     public function add_entry(){
-        $d = new Test_data($_GET);
-        if(!$d->is_valid()){
-            echo "无效参数！";
-            exit();
-        }
-        echo $this->test_model->add($d)?"添加成功！":"添加失败！";
-        exit();
+        echo $this->test_model->add(array(
+            'name'=> $_GET['name'],
+            'age'=> $_GET['age'],
+            'address'=> $_GET['address']
+        ))?"添加成功！":"添加失败！";
     }
 }
 
