@@ -66,30 +66,22 @@ class MY_Model extends CI_Model{
 
     /**
      * 
-     * 根据资源标志获取数据
-     * @param $id
+     * 根据指定条件获取单一记录
+     * @param $mixed 资源ID或者条件数组
      */
-    public function get($id){
-        $this->db->select($this->select)
-            ->where('id',$id)
-            ->limit(1);
+    public function get($mixed){
+        $q = $this->db->select($this->select);
+        if(is_array($mixed)){
+            $q->where($mixed);
+        }else{
+            $q->where('id',$mixed);
+        }
+        $q->limit(1);
         return $this->db->get($this->tbname)->row_object(0);
     }
 
     /**
-     * 
-     * 模型数据是否存在
-     * @param $id 指定模型数据标志
-     */
-    public function exists($id){
-        $this->db->select('id')
-            ->where('id',$id)
-            ->limit(1);
-        return ($this->db->get($this->tbname)->num_rows()>0);
-    }
-
-    /**
-     * 确保数据条目存在，返回本条数据ID
+     * 确保数据记录存在，返回本记录ID
      */
     public function ensure($data){
         $this->db->select('id')
@@ -99,7 +91,7 @@ class MY_Model extends CI_Model{
         $id = 0;
         if($res->num_rows()>0){
             $id = $res->row_object(0)->id;
-        }else if($this->add($this->make_data($data))){
+        }else if($this->add($data)){
             $id = $this->db->insert_id();
         }
         return $id;
@@ -107,63 +99,76 @@ class MY_Model extends CI_Model{
 
     /**
      * 检查指定数据是否存在，返回本条数据ID(多个只返回第一个)
+     * @param $mixed 指定数据条件(ID或条件数组)
      */
-    public function check($data){
-        if(!is_array($data))return 0;
-        $this->db->select('id')
-            ->where($data)
-            ->limit(1);
-        $res = $this->db->get($this->tbname);
+    public function check($mixed){
+        $q = $this->db->select('id');
+        if(is_array($mixed)){
+            $q->where($mixed);
+        }else{
+            $q->where('id',$mixed);
+        }
+        $res = $q->limit(1)->get($this->tbname);
         if($res->num_rows()>0){
             return $res->row_object(0)->id;
         }
-        return 0;
+        return false;
+    }
+
+    /**
+     * 检查数组数据是否可以添加到数据库
+     * 需要子类继承，根据不同表格字段进行判断
+     *
+     * @param @data 数组数据
+     */
+    public function is_addable($data){
+        if(!$data || !is_array($data)) return false;
+        return true;
     }
 
     /**
      * 
-     * 添加模型数据
-     * @param $data 模型数据信息，模型结构须提供is_valid接口
+     * 添加数组数据
+     * @param $data 数组，子类提供is_addable接口
      */
     public function add($data){
-        if( !$data || !$data->is_valid() ){
+        if( !$data || !$this->is_addable($data) ){
             return false;
         }
-        return $this->db->insert($this->tbname,$data);
-    }
-
-    /**
-     * 子类继承，返回一个可添加的实例化对象
-     */
-    public function make_data($arraydata){
-        return null;
+        if($this->db->insert($this->tbname,$data)){
+            return $this->db->insert_id();
+        }
+        return false;
     }
 
     /**
      * 
-     * 移除模型数据
-     * @param $id 模型数据标志
+     * 删除一条数据记录
+     * @param $mixed 指定删除条件或记录ID
      */
-    public function remove($id){
-        if( !$this->exists($id) ){
-            return false;
+    public function remove($mixed){
+        if(is_array($mixed)){
+            $this->db->where($mixed);
+        }else{
+            $this->db->where('id',$mixed);
         }
-        $this->db->where('id',$id)->limit(1);
-        return $this->db->delete($this->tbname);
+        return $this->db->limit(1)->delete($this->tbname);
     }
 
     /**
      * 
      * 更新模型数据
-     * @param $id 数据标志
-     * @param $data 数据信息数组
+     * @param $mixed 指定记录ID或判定条件数组
+     * @param $data 更新内容数组
      */
-    public function update($id,$data){
-        if( !$data || !$this->exists($id) ){
-            return RC_GLOBAL_InvalidID;
+    public function update($mixed,$data){
+        if(!$mixed || !$data) return false;
+        if(is_array($mixed)){
+            $this->db->where($mixed);
+        }else{
+            $this->db->where('id',$mixed);
         }
-        $this->db->where('id',$id)->limit(1);
-        return $this->db->update($this->tbname,$data);
+        return $this->db->limit(1)->update($this->tbname,$data);
     }
 }
 

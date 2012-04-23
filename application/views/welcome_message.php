@@ -78,7 +78,7 @@
 		<p>The corresponding controller for this page is found at:</p>
 		<code>application/controllers/welcome.php</code>
 
-                <p>If you are exploring CodeIgniter for the very first time, you should start by reading the <a href="http://www.codeigniter/user_guide/">CodeIgniter User Guide</a> and <a href="https://github.com/zhiya/csv/wiki">CSV WIKI</a>.</p>
+                <p>If you are exploring CodeIgniter for the very first time, you should start by reading the <a href="http://www.codeigniter.com/user_guide/">CodeIgniter User Guide</a> and <a href="https://github.com/zhiya/csv/wiki">CSV WIKI</a>.</p>
 	</div>
 
 	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds</p>
